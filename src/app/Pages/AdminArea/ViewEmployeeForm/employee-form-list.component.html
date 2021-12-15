@@ -1,0 +1,306 @@
+<div class="row white-bg ml-2 mb-2 mr-2 ModuleName">
+    <div class="col-lg-4 Adjust">
+        <h2 class="text-white">Survey List</h2>
+    </div>
+    <div class="col-lg-8 Adjust">
+        <button type="button" class="btn btn-w-m btn-light mt-3 mr-5 float-right" [hidden]="!showCancelButton"
+            (click)="showhide('Cancel')"><i class="fas fa-arrow-circle-left mr-2"></i>Back</button>
+    </div>
+</div>
+<form role="form">
+    <div class="row mt-2" [hidden]="!showSurvey">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-hover table-striped dt-responsive table-bordered" cellspacing="0"
+                            width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Emp ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Created By</th>
+                                    <th>Created Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of surveydetailModel let ndx=index;">
+                                    <td>{{ndx+1}}</td>
+                                    <td>{{p.empID}}</td>
+                                    <td>{{p.employeeName}}</td>
+                                    <td>{{p.createdBy}}</td>
+                                    <td>{{p.createdDate | date}}</td>
+                                    <td>
+                                        <button class="btn btn-danger color text-white btn-sm m-1" title="View Survey"
+                                            (click)="viewSurveyFunc(p); showhide('New')"> <i class="fa fa-eye"
+                                                aria-hidden="true"></i></button>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row" [hidden]="!viewSurvey">
+    <div class="container emp-form mt-2">
+        <form [formGroup]="EmployeeForm" role="form" class="bg-white m-2 mt-3">
+            <div class="row mb-2">
+                <div class="col-md-4">
+                    <div>
+                        <img src="assets/css/patterns/Menzieslogo.png"
+                            style="width: 55%; height: 52%; margin-top: 23px" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="mt-4 font-weight-bold text-center">Employee Exit Form</h3>
+                </div>
+                <div class="col-md-4">
+                    <span class="float-right mt-4"> Effective Date: {{currentDate}} </span>
+                </div>
+            </div>
+
+            <div class="basic-information">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Emp Code: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" readonly class="form-control" formControlName="EmployeeRefNo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Employee Name: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" readonly class="form-control" formControlName="EmployeeName" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Date of Joining: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" readonly class="form-control" formControlName="JoiningDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Gender: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" readonly class="form-control" formControlName="Sex" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Resignation Date: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" formControlName="ResignationDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label> Last working Date: </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" readonly class="form-control" formControlName="LeavingDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label> Station: </label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" readonly class="form-control" formControlName="BranchTitle" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label> Grade: </label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" readonly class="form-control" formControlName="EmployeeGradeTitle" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label> Designation: </label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" readonly class="form-control" formControlName="DesignationTitle" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label> Supervisor: </label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" readonly class="form-control" formControlName="ApproverName" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="primary-reason mt-4">
+                <ng-container *ngFor="let p of statementResponseModel">
+                    <p>
+                        {{p.statementDescription}}
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6" *ngFor="let SD of SrveyDetailResponse">
+                            <div class="form-check">
+                                <ng-container *ngIf="p.statementID == SD.statementID">
+                                    <input type="checkbox" [checked]="SD.checked" onClick="return false" />
+                                    <label for="vehicle1" class="fontsize"> {{SD.statementDetail}}</label>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class="primary-reason">
+                <p>Job Feedback</p>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="assets/css/patterns/Capture.PNG" class="img-fluid" />
+                </div>
+            </div>
+            <div class="primary-reason mt-4">
+                <ng-container *ngFor="let p of feedBackStatementResponseModel">
+                    <div class="statement-table table-responsive mt-3">
+                        <table>
+                            <tr>
+                                <td class="bgcolorNew" style="width: 60%;"><b>Statements</b></td>
+                                <td class="bgcolorNew"><span><b>1</b></span></td>
+                                <td class="bgcolorNew"><span><b>2</b></span></td>
+                                <td class="bgcolorNew"><span><b>3</b></span></td>
+                                <td class="bgcolorNew"><span><b>4</b></span></td>
+                                <td class="bgcolorNew"><span><b>5</b></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="primary-reasonNew">
+                        <p>
+                            <b>{{p.feedBackStatement}}</b>
+                        </p>
+                    </div>
+                    <ng-container *ngFor="let fd of feedBackStatementResponseModelNew">
+                        <ng-container *ngIf="p.feedbackStatementID == fd.feedbackStatementID">
+                            <div class="statement-table table-responsive">
+                                <table>
+                                    <tr>
+                                        <td style="width: 60%">{{fd.feedBackStatementDetail}}
+                                        </td>
+                                        <td class="text-center"><input type="checkbox" [checked]="fd.optionOne"
+                                                onClick="return false" />
+                                        </td>
+                                        <td class="text-center"><input type="checkbox" [checked]="fd.optionTwo"
+                                                onClick="return false" />
+                                        </td>
+                                        <td class="text-center"><input type="checkbox" [checked]="fd.optionThree"
+                                                onClick="return false" />
+                                        </td>
+                                        <td class="text-center"><input type="checkbox" [checked]="fd.optionFour"
+                                                onClick="return false" />
+                                        </td>
+                                        <td class="text-center"><input type="checkbox" [checked]="fd.optionFive"
+                                                onClick="return false" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="primary-reason mt-4">
+                <p id="recommend">
+                    Would you recommend RAS as a good organization to work for?
+                </p>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4" *ngFor="let p of hardCodeArrOne">
+                    <div class="form-check">
+                        <input type="checkbox" [checked]="p.optionChecked" onClick="return false" />
+                        <label class="fontsize">{{p.name}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="primary-reason mt-4">
+                <p id="future">
+                    I would consider working for this company again in the future.
+                </p>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4" *ngFor="let p of hardCodeArrTwo">
+                    <div class="form-check">
+                        <input type="checkbox" name="optionChecked"
+                            (click)="checkBoxQuestionTwo(p,optionChecked.checked)" [checked]="p.optionChecked"
+                            #optionChecked value="{{ p.optionChecked }}" />
+                        <label class="fontsize">{{p.name}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="primary-reason mt-4">
+                <p>
+                    What has your new place of employment offered you that is more attractive
+                    than your present job?
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <textarea class="form-control" formControlName="firstTextArea" readonly></textarea>
+                </div>
+            </div>
+            <div class="primary-reason mt-4">
+                <p>
+                    What are your recommendations or feedback for making RAS a better place to
+                    work?
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <textarea class="form-control" formControlName="secondTextArea" readonly></textarea>
+                </div>
+            </div>
+            <!-- <div class="row">
+                    <div class="col-md-12 text-center mt-3">
+                        <button type="button" class="btn btn-lg btn-success" (click)="submitEmployeeForm()"> Submit</button>
+                    </div>
+                </div> -->
+        </form>
+    </div>
+</div>

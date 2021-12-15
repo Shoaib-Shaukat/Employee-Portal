@@ -1,0 +1,70 @@
+<nav class="navbar-default navbar-static-side" id="bgcolor" role="navigation">
+        <div class="sidebar-collapse ">
+                <ul>
+                        <li class="nav-header bg bg-secondary" style="background-color: white !important;">
+                                <div class="dropdown profile-element ">
+                                        <!-- <img alt="image" class="img-responsive"
+                                                src="../../../../assets//img//1616682659957.jpg" /> -->
+                                        <h1 class="heading">EMPLOYEE PORTAL</h1>
+                                        <a data-toggle=" dropdown" class="dropdown-toggle" href="#">
+
+                                        </a>
+                                </div>
+                                <div class="logo-element">
+                                        EP
+                                </div>
+                        </li>
+                </ul>
+                <ul class="nav metismenu" id="side-menu">
+                        <li *ngIf="GV.canViewDashBoard"><a routerLink="/Dashboard"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fa fa-tachometer"></i>
+                                        <span class="hide-menu ml-2">DashBoard</span></a>
+                        </li>
+                        <li *ngIf="GV.viewReports"><a routerLink="/Admin/EmployeeFormList"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fa fa-sitemap"></i>
+                                        <span class="hide-menu ml-2 pr-5">Survey List</span></a>
+                        </li>
+                        <li *ngIf="GV.canCreateSurvey "><a routerLink="/Admin/Surveys"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fa fa-superpowers"></i>
+                                        <span class="hide-menu ml-2 pr-5">Surveys</span></a>
+                        </li>
+                        <li *ngIf="GV.canCreateStatements"><a routerLink="/Admin/Statements"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fa fa-barcode"></i>
+                                        <span class="hide-menu ml-2 pr-5">Statements</span></a>
+                        </li>
+                        <li *ngIf="GV.canCreateFeedBack"><a routerLink="/Admin/FeedBack"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fas fa-align-left"></i>
+                                        <span class="hide-menu ml-2 pr-5">Feed Back</span></a>
+                        </li>
+                        <li *ngIf="GV.canAssignRoles || GV.canActivateSurvey"><a routerLink="/Admin/AssignRoles"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fas fa-flag"></i>
+                                        <span class="hide-menu ml-2 pr-5">Activate Surveys</span></a>
+                        </li>
+                        <li *ngIf="GV.canAssignRoles"><a routerLink="/Admin/AssignGroupRoles"
+                                        [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fas fa-flag-checkered"></i>
+                                        <span class="hide-menu ml-2 pr-5">Assign Group Roles</span></a>
+                        </li>
+                        <li><a routerLink="/Admin/HRPage" [routerLinkActive]="['activeMenuLink']" class="sidebar-link">
+                                        <i class="fa fa-suitcase"></i>
+                                        <span class="hide-menu ml-2 pr-5">Employee Exit Form</span></a>
+                        </li>
+                        <!-- <li *ngIf="hasRole == true"><a routerLink="/HRAdminPage" [routerLinkActive]="['activeMenuLink']"
+                                        class="sidebar-link">
+                                        <i class="fa fa-shield"></i>
+                                        <span class="hide-menu ml-2 pr-5">HR / Admin</span></a>
+                        </li> -->
+                        <!-- <li><a routerLink="/SearchEmployee" [routerLinkActive]="['activeMenuLink']"
+                                        class="sidebar-link">
+                                        <i class="fa fa-search"></i>
+                                        <span class="hide-menu ml-2 pr-5">Search Employee</span></a>
+                        </li> -->
+                </ul>
+        </div>
+</nav>

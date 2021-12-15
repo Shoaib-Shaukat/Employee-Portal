@@ -1,0 +1,242 @@
+<div class="row white-bg ml-2 mb-2 mr-2 ModuleName">
+    <div class="col-lg-4 Adjust">
+        <h2 class="text-white">Feed Back</h2>
+    </div>
+    <div class="col-lg-8 Adjust">
+        <button type="button" class="btn btn-w-m btn-secondary mt-3 mr-5 float-right" [hidden]="!showCancelButton"
+            (click)="showhide('Cancel')"><i class="fa fa-times "></i> Cancel </button>
+        <button type="button" class="btn btn-w-m btn-light mt-3 mr-2 text-black float-right" [hidden]="!showeditButton"
+            (click)="saveStatement()"><i class="fa fa-pencil"></i> Update </button>
+        <button type="button" class="btn btn-w-m btn-light mt-3 mr-2 text-black float-right" [hidden]="!showSaveButton"
+            (click)="saveStatement()"><i class="fa fa-check "></i>
+            Save </button>
+        <button type="button" class="btn btn-w-m btn-light mt-3 mr-5 text-black float-right" [hidden]="!shownewButton"
+            (click)="showhide('New')"><i class="fa fa-plus"></i>
+            Add Feed Back Statement </button>
+    </div>
+</div>
+<form [formGroup]="tableForm" role="form" class="bg-white m-2 mt-3">
+    <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2" [hidden]="!showStatements">
+        <div class="col-md-4 mt-2">
+            <br>
+            <div class="input-group ">
+                <label class="col-form-label">Surveys</label>
+                <select class="form-control ml-3" formControlName="surveyID">
+                    <option *ngFor="let p of surveyModelResponse" [value]="p.surveyID">
+                        {{p.surveryName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 mt-2">
+            <br>
+            <div class="input-group ">
+                <button type="button" class="btn btn-lg btn-success" (click)="getStatements()"><i class="fa fa-search"
+                        aria-hidden="true"></i> Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+<form [formGroup]="StatementForm" role="form">
+    <div class="row" [hidden]="!addnewStatement">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content p-xl">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Select Survey</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" formControlName="surveyID"
+                                        [ngClass]="{ 'is-invalid': (submitted && f.surveyID.errors) || (submitted && f.surveyID.value == 0)}">
+                                        <option *ngFor="let p of surveyModelResponse" [value]="p.surveyID">
+                                            {{p.surveryName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row"><label class="col-sm-4 col-form-label">Feed Back
+                                    Statement
+                                </label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" formControlName="feedBackStatement" maxlength="250"
+                                        id="exampleFormControlTextarea1" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group row"><label class="col-sm-4 col-form-label">Sequence No.
+                                </label>
+                                <div class="col-sm-8"> <input type="text" class="form-control"
+                                        formControlName="dissequence" appTwoDigitDecimaNumber
+                                        [ngClass]="{ 'is-invalid': submitted && f.dissequence.errors }">
+                                </div>
+                            </div>
+                            <div class="form-group row"><label class="col-sm-4 col-form-label">Is Active?
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="checkbox" formControlName="isActive"
+                                        (click)="isActiveCheck(IsActive.checked)" #IsActive />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="row mt-2" [hidden]="!showStatements" *ngIf="feedBackStatementResponseModel.length > 0">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                class="table table-hover table-striped dt-responsive table-bordered" cellspacing="0"
+                                width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Statement</th>
+                                        <th>Sequence No.</th>
+                                        <th>Is Active</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let p of feedBackStatementResponseModel let ndx=index;">
+                                        <td>{{ndx+1}}</td>
+                                        <td>{{p.feedBackStatement}}</td>
+                                        <td>{{p.dissequence}}</td>
+                                        <td><input readonly type="checkbox" name="isActive" [checked]="p.isActive"
+                                                value="{{p.isActive}}" onClick="return false"></td>
+                                        <td>
+                                            <button class="btn btn-secondary color text-white btn-sm m-1" title="Edit"
+                                                (click)="editStatement(p)"> <i class="fa fa-edit"
+                                                    aria-hidden="true"></i></button>
+                                            <button *ngIf="GV.canCreateQuestion"
+                                                class="btn btn-dark color text-white btn-sm m-1" data-toggle="modal"
+                                                data-target=".AddQuestion" title="Add Question"
+                                                (click)="addQuestions(p)"> <i class="fa fa-plus"
+                                                    aria-hidden="true"></i></button>
+                                            <button class="btn btn-danger color text-white btn-sm m-1"
+                                                data-toggle="modal" data-target=".ViewQuestions" title="View Questions"
+                                                (click)="viewQuestions(p)"> <i class="fa fa-eye"
+                                                    aria-hidden="true"></i></button>
+                                        </td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="float-right">
+            All Right <strong>Reserved</strong>.
+        </div>
+        <div>
+            <strong>Copyright</strong> Menzies RAS &copy; 2021
+        </div>
+    </div>
+</form>
+
+
+
+<div class="modal fade AddQuestion" id="view-assigned-group-role-modal" data-backdrop="static" data-keyboard="false"
+    tabindex="-1" role="dialog" aria-labelledby="assignedGroupRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <form [formGroup]="AddQuestionForm" role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="assignedGroupRoleModalLabel">Add Question</h4>
+                    <button type="button" class="close" data-dismiss="modal" #addQuestionModal aria-hidden="true">
+                        ×
+                    </button>
+                </div>
+                <div class="modal-body mt-5 mb-2">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Question
+                                </label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" formControlName="feedBackStatementDetail"
+                                        maxlength="250" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group row"><label class="col-sm-6 col-form-label">Is Active?
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="checkbox" formControlName="isActive"
+                                        (click)="isActiveCheckPopup(IsActiveQues.checked)" #IsActiveQues />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="app-modal-footer mb-2">
+                    <button type="button" class="btn btn-w-m btn-dark text-black mr-3 float-right"
+                        (click)="saveQuestion()">Save</button>
+                    <button type="button" class="btn btn-w-m btn-secondary text-white mr-2 float-right"
+                        (click)="cancelAddQuestion()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade ViewQuestions" id="view-assigned-group-role-modal" data-backdrop="static" data-keyboard="false"
+    tabindex="-1" role="dialog" aria-labelledby="assignedGroupRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xll">
+        <form role="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="assignedGroupRoleModalLabel">Questions</h4>
+                    <button type="button" class="close" data-dismiss="modal" #viewQuestionModal aria-hidden="true">
+                        ×
+                    </button>
+                </div>
+                <div class="modal-body mt-2 mb-2">
+                    <div class="col-lg-12">
+                        <div class="wrapper wrapper-content animated fadeInRight">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                        class="table table-hover table-striped dt-responsive table-bordered"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr.</th>
+                                                <th>Feed Back Statement Question's</th>
+                                                <th>Is Active</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of feedBackStatementDetailResponse let ndx=index;">
+                                                <td>{{ndx+1}}</td>
+                                                <td>{{p.feedBackStatementDetail}}</td>
+                                                <td><input readonly type="checkbox" name="isActive"
+                                                        [checked]="p.isActive" value="{{p.isActive}}"
+                                                        onClick="return false"></td>
+                                                <td>
+                                                    <button class="btn btn-secondary color text-white btn-sm m-1"
+                                                        title="Edit" (click)="editFeedbackStatement(p)"
+                                                        data-toggle="modal" data-target=".AddQuestion"> <i
+                                                            class="fa fa-edit" aria-hidden="true"></i></button>
+                                                </td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

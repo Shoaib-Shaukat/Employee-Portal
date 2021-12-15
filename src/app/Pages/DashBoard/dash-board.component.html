@@ -1,0 +1,58 @@
+<form [formGroup]="StatementForm" role="form" class="bg-white m-2 mt-3">
+    <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2">
+        <div class="col-md-10 mt-2">
+            <br>
+            <div class="input-group ">
+                <label class="col-form-label">Select Statements</label>
+                <select class="form-control ml-3" formControlName="statementID">
+                    <option *ngFor="let p of statementResponseModel" [value]="p.statementID">
+                        {{p.statementDescription}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 mt-2">
+            <br>
+            <div class="input-group ">
+                <button type="button" class="btn btn-lg btn-success" (click)="getBarChartHorizental()"> Load
+                    Data</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ibox-content">
+        <div class="col-md-6">
+            <canvas baseChart [datasets]="barChartDataNaturewise" [labels]="barChartLabelsNaturewise"
+                [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                [chartType]="barChartType">
+            </canvas>
+        </div>
+    </div>
+    <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2">
+        <div class="col-md-10 mt-2">
+            <br>
+            <div class="input-group ">
+                <label class="col-form-label">Select Feedback Statements</label>
+                <select class="form-control ml-3" formControlName="feedbackStatementID">
+                    <option *ngFor="let p of feedbackResponse" [value]="p.feedbackStatementID">
+                        {{p.feedBackStatement}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 mt-2">
+            <br>
+            <div class="input-group ">
+                <button type="button" class="btn btn-lg btn-success" (click)="getBarChartFeedback()"> Load
+                    Data</button>
+            </div>
+        </div>
+        
+    </div>
+    <div class="ibox-content">
+        <div class="col-md-6">
+            <canvas baseChart [datasets]="barChartDataFeedback" [labels]="barChartLabelFeedback"
+                [options]="barChartOptionsfeedback" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                [chartType]="barChartTypefeedBack">
+            </canvas>
+        </div>
+    </div>
+</form>
