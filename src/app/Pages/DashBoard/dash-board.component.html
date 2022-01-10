@@ -1,57 +1,87 @@
 <form [formGroup]="StatementForm" role="form" class="bg-white m-2 mt-3">
     <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2">
-        <div class="col-md-10 mt-2">
+        <div class="col-md-8 mt-2">
             <br>
             <div class="input-group ">
-                <label class="col-form-label">Select Statements</label>
-                <select class="form-control ml-3" formControlName="statementID">
-                    <option *ngFor="let p of statementResponseModel" [value]="p.statementID">
+                <label class="col-md-3 col-form-label">Select Statement</label>
+                <select class="col-md-9 form-control ml-3" formControlName="statementID">
+                    <option class="form-control" *ngFor="let p of statementResponseModel" [value]="p.statementID">
                         {{p.statementDescription}}</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-2 mt-2">
+        <div class="col-md-4 mt-2">
             <br>
             <div class="input-group ">
-                <button type="button" class="btn btn-lg btn-success" (click)="getBarChartHorizental()"> Load
+                <button type="button" class="btn btn-w-m btn-dark text-white mr-3" (click)="getBarChartHorizental()">
+                    Load
                     Data</button>
+                <button type="button" class="btn btn-w-m btn-secondary mr-2 " (click)="resetFirstChart()"> Reset
+                </button>
             </div>
         </div>
-    </div>
-
-    <div class="ibox-content">
-        <div class="col-md-6">
-            <canvas baseChart [datasets]="barChartDataNaturewise" [labels]="barChartLabelsNaturewise"
-                [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
-                [chartType]="barChartType">
+        <div class="col-md-8 mt-2 ">
+            <canvas *ngIf="ResponseReasonsReportModel.length > 0" baseChart [datasets]="barChartDataNaturewise"
+                [labels]="barChartLabelsNaturewise" [options]="barChartOptions" [plugins]="barChartPlugins"
+                [legend]="barChartLegend" [chartType]="barChartType">
             </canvas>
         </div>
     </div>
     <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2">
-        <div class="col-md-10 mt-2">
+        <div class="col-md-8 mt-2">
             <br>
             <div class="input-group ">
-                <label class="col-form-label">Select Feedback Statements</label>
-                <select class="form-control ml-3" formControlName="feedbackStatementID">
-                    <option *ngFor="let p of feedbackResponse" [value]="p.feedbackStatementID">
-                        {{p.feedBackStatement}}</option>
+                <label class="col-md-3 col-form-label">Select FeedBack Question</label>
+                <select class="col-md-9 form-control ml-3" formControlName="feedbackStatementDetailID">
+                    <option class="form-control" *ngFor="let p of feedBackStatementResponseModelNew"
+                        [value]="p.feedbackStatementDetailID">
+                        {{p.feedBackStatementDetail}}</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-2 mt-2">
+        <div class="col-md-4 mt-2">
             <br>
             <div class="input-group ">
-                <button type="button" class="btn btn-lg btn-success" (click)="getBarChartFeedback()"> Load
+                <button type="button" class="btn btn-w-m btn-dark text-white mr-3" (click)="getBarChartFQ()">
+                    Load
                     Data</button>
+                <button type="button" class="btn btn-w-m btn-secondary mr-2 " (click)="resetSecondChart()"> Reset
+                </button>
             </div>
         </div>
-        
+        <div class="col-md-8 mt-2 ">
+            <canvas *ngIf="feedbackQuestionsReportModel.length > 0" baseChart [datasets]="barChartDataFeedbackQuestions"
+                [labels]="barChartLabelFeedbackuestions" [options]="barChartOptions" [plugins]="barChartPlugins"
+                [legend]="barChartLegend" [chartType]="barChartType">
+            </canvas>
+        </div>
     </div>
-    <div class="ibox-content">
-        <div class="col-md-6">
-            <canvas baseChart [datasets]="barChartDataFeedback" [labels]="barChartLabelFeedback"
-                [options]="barChartOptionsfeedback" [plugins]="barChartPlugins" [legend]="barChartLegend"
-                [chartType]="barChartTypefeedBack">
+    <div class="row col-md-12 wrapper border-bottom white-bg page-heading mt-2 m-2">
+        <div class="col-md-8 mt-2">
+            <br>
+            <div class="input-group ">
+                <label class="col-md-3 col-form-label">Select Statement</label>
+                <select class="col-md-9 form-control ml-3" id="ddlViewBy">
+                    <option value="0" [selected]="statmentID == 0"></option>
+                    <option value="1">Would you recommend RAS as a good organization to work for?</option>
+                    <option value="2">I would consider working for this company again in the future.</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 mt-2">
+            <br>
+            <div class="input-group ">
+                <button type="button" class="btn btn-w-m btn-dark text-white mr-3" (click)="getBarChartLastSt()">
+                    Load
+                    Data</button>
+                <button type="button" class="btn btn-w-m btn-secondary mr-2 " (click)="resetThirdChart()"> Reset
+                </button>
+            </div>
+        </div>
+        <div class="col-md-8 mt-2 ">
+            <canvas *ngIf="LastTwoStateReportModel.length > 0" baseChart [datasets]="barChartDataLastTwoState"
+                [labels]="barChartLabelLastTwoState" [options]="barChartOptions" [plugins]="barChartPlugins"
+                [legend]="barChartLegend" [chartType]="barChartType">
             </canvas>
         </div>
     </div>

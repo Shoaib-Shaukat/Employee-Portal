@@ -280,7 +280,7 @@ export class HRPageComponent implements OnInit {
         this.LastStatement = true;
       }
       if ((this.EmployeeForm.valid) && (this.SecondLastStatement == false) && (this.LastStatement == false)) {
-        this.empSurveyModel.employeeName = localStorage.getItem('userName');
+        this.empSurveyModel.employeeName = this.EmployeeForm.controls.EmployeeName.value;
         this.API.PostData('/admin/saveSurvey', this.empSurveyModel).subscribe(c => {
           if (c != null) {
             Swal.fire({
@@ -479,7 +479,7 @@ export class HRPageComponent implements OnInit {
         optionTwo: p.optionTwo,
         optionThree: p.optionThree,
         optionFour: p.optionFour,
-        optionFive: p.ptionFive
+        optionFive: p.optionFive
       }
       var index = this.empSurveyModel.feedBackStatementDetailRequest.findIndex(c => c.feedbackStatementDetailID == p.feedbackStatementDetailID);
       if (index != -1) {

@@ -2,7 +2,13 @@ export class ReasonsReportModel {
     reasonCount: number;
     statementDetail: string;
 }
-export class feedbackReportModel {
+
+export class feedbackQuestionsReportModel {
     fcount: number;
     feedback: string;
+}
+
+export class LastTwoStateReportModel {
+    Qcount: number;
+    Statement: string;
 }
