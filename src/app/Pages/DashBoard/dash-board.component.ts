@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
 import { MultiDataSet, Label, Color, SingleDataSet } from 'ng2-charts';
-import { ReasonsReportModel, feedbackQuestionsReportModel, LastTwoStateReportModel } from './Model/DashBoardModel';
+import { ReasonsReportModel, feedbackQuestionsReportModel, LastTwoStateReportModel, getDetail, requestSearch, stationResponse } from './Model/DashBoardModel';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { statementResponseModel } from '../AdminArea/statements/Statements.Model'
@@ -19,6 +19,13 @@ import { feedbackResponse, feedBackStatementResponseModelNew } from '../AdminAre
   styleUrls: ['./dash-board.component.css']
 })
 export class DashBoardComponent implements OnInit {
+  defaultStation: stationResponse;
+  stationResponse: stationResponse[];
+  validForm: boolean = false;
+  requestSearch: requestSearch;
+  getDetail: getDetail[];
+  dashBoardForm: FormGroup;
+  //.......................................
   statmentID: number = 0;
   LastTwoStateReportModel: LastTwoStateReportModel[];
   feedbackQuestionsReportModel: feedbackQuestionsReportModel[];
@@ -85,8 +92,6 @@ export class DashBoardComponent implements OnInit {
   datatableElement: QueryList<DataTableDirective>;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
-  dtOptions1: any = {};
-  dtTrigger1: Subject<any> = new Subject();
   dataTable: any;
   tableData = [];
 
@@ -98,13 +103,59 @@ export class DashBoardComponent implements OnInit {
     this.feedBackStatementResponseModelNew = [];
     this.feedbackQuestionsReportModel = [];
     this.LastTwoStateReportModel = [];
+    this.requestSearch = new requestSearch();
+    this.getDetail = [];
+    this.stationResponse = [];
+    this.defaultStation = new stationResponse();
   }
 
   ngOnInit(): void {
     this.getStatements();
     this.getFeedBackDetail();
     this.getFeedBackStatementsDetail();
+    //this.getStations();
+    this.searchData();
+    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    this.dashBoardForm.get('fromDate').patchValue(this.formatDate(new Date(y, m, 1)));
+    this.dashBoardForm.get('ToDate').patchValue(this.formatDate(new Date(y, m + 1, 0)));
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 15,
+      processing: true,
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf'
+      ]
+    };
   }
+  private formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
+  InitializeForm(): any {
+    this.StatementForm = new FormGroup({
+      statementID: new FormControl(""),
+      statementDescription: new FormControl(""),
+      feedbackStatementDetailID: new FormControl(""),
+      feedBackStatementDetail: new FormControl(""),
+    });
+    this.dashBoardForm = new FormGroup({
+      airportID: new FormControl(""),
+      StationName: new FormControl(""),
+      gradeID: new FormControl(""),
+      gradeName: new FormControl(""),
+      genderID: new FormControl(""),
+      genderName: new FormControl(""),
+      fromDate: new FormControl(""),
+      ToDate: new FormControl(""),
+    });
+  }
+
   getStatements() {
     this.API.getdata('/admin/getStatements?surveyID=' + 1).subscribe(
       data => {
@@ -242,14 +293,6 @@ export class DashBoardComponent implements OnInit {
         // this.router.navigateByUrl('/login');
       });
   }
-  InitializeForm(): any {
-    this.StatementForm = new FormGroup({
-      statementID: new FormControl(""),
-      statementDescription: new FormControl(""),
-      feedbackStatementDetailID: new FormControl(""),
-      feedBackStatementDetail: new FormControl(""),
-    });
-  }
 
   getFeedBackStatementsDetail() {
     this.API.getdata('/admin/getfeedbackStatementDetail?surveyID=1').subscribe(
@@ -348,5 +391,83 @@ export class DashBoardComponent implements OnInit {
   resetThirdChart() {
     this.statmentID = 0;
     this.LastTwoStateReportModel = [];
+  }
+  //..............................................Dashboard................................................................
+
+  getStations() {
+    this.API.getdata("/Generic/getStations").subscribe(
+      (c) => {
+        if (c != null) {
+          this.stationResponse = c;
+          this.defaultStation.airportID = 0;
+          this.defaultStation.StationName = "ALL";
+          this.stationResponse.push(this.defaultStation);
+          this.dashBoardForm.controls.airportID.setValue(0);
+        }
+      },
+      (error) => {
+        Swal.fire({
+          text: error.error.Message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    );
+  }
+  genderChanged() {
+    if (this.dashBoardForm.controls.genderName.value == "Select Gender") {
+      this.dashBoardForm.controls.genderName.setValue("");
+      this.dashBoardForm.controls.genderID.setValue(0);
+    }
+    else if (this.dashBoardForm.controls.genderName.value == "Male") {
+      this.dashBoardForm.controls.genderID.setValue(1);
+    }
+    else if (this.dashBoardForm.controls.genderName.value == "Female") {
+      this.dashBoardForm.controls.genderID.setValue(2);
+    }
+    else if (this.dashBoardForm.controls.genderName.value == "Other") {
+      this.dashBoardForm.controls.genderID.setValue(3);
+    }
+  }
+
+  validations() {
+    if (this.dashBoardForm.controls.fromDate.value == "" || this.dashBoardForm.controls.fromDate.value == undefined || this.dashBoardForm.controls.fromDate.value == null) {
+      Swal.fire({
+        text: "Select From Date",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      this.validForm = false;
+      return;
+    }
+    if (this.dashBoardForm.controls.ToDate.value == "" || this.dashBoardForm.controls.ToDate.value == undefined || this.dashBoardForm.controls.ToDate.value == null) {
+      Swal.fire({
+        text: "Select To Date",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      this.validForm = false;
+      return;
+    }
+    this.validForm = true;
+  }
+
+  searchData() {
+    this.API.getdata('/Admin/report').subscribe(c => {
+      if (c != null) {
+        this.destroyDT(0, true).then((destroyed) => {
+          this.getDetail = c;
+          this.getDetail.sort((a, b) => a.ID < b.ID ? 1 : a.ID > b.ID ? -1 : 0);
+          this.dtTrigger.next();
+        });
+      }
+    },
+      error => {
+        Swal.fire({
+          text: error.error.Message,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
   }
 }

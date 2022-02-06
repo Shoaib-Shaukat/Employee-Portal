@@ -79,11 +79,12 @@ export class feedBackStatementDetailRequest {
 
 
 export class empSurveyModel {
-    employeeName: string;
+    empModel: empModel;
     statementRequestModel: statementRequestModel[];
     feedBackStatementDetailRequest: feedBackStatementDetailRequest[];
     otherFeedBackModel: otherFeedBackModel[];
     constructor() {
+        this.empModel = new empModel();
         this.otherFeedBackModel = [];
         this.statementRequestModel = [];
         this.feedBackStatementDetailRequest = [];

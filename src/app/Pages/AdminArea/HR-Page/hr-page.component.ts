@@ -280,7 +280,7 @@ export class HRPageComponent implements OnInit {
         this.LastStatement = true;
       }
       if ((this.EmployeeForm.valid) && (this.SecondLastStatement == false) && (this.LastStatement == false)) {
-        this.empSurveyModel.employeeName = this.EmployeeForm.controls.EmployeeName.value;
+        this.empSurveyModel.empModel = this.empModel;
         this.API.PostData('/admin/saveSurvey', this.empSurveyModel).subscribe(c => {
           if (c != null) {
             Swal.fire({
